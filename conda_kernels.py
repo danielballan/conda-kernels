@@ -9,7 +9,7 @@ import glob
 import os
 import subprocess
 import json
-from IPython.kernel.kernelspec import KernelSpecManager, _list_kernels_in
+from jupyter_client.kernelspec import KernelSpecManager, _list_kernels_in
 
 
 def conda_envs():
