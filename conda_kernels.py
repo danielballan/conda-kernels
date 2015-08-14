@@ -32,7 +32,7 @@ def conda_envs():
 
 
 # Put all centrally installed environments in the kernel path.
-_CENTRAL_ENVS = '/opt/conda/envs/*/share/jupyter/kernels/'
+_CENTRAL_ENVS = '/usr/share/jupyter/kernels/'
 
 
 class CondaKernelSpecManager(KernelSpecManager):
