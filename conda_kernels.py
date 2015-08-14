@@ -18,7 +18,7 @@ def conda_envs():
     if not os.path.exists(conda):
         return []
 
-    envs = subprocess.check_output([conda, 'env', 'list', '--json'])
+    envs = subprocess.check_output([conda, 'env', 'list', '--json']).decode()
 
     envs = json.loads(envs)['envs']
     return [os.path.join(env, 'share', 'jupyter', 'kernels') for env in envs]
