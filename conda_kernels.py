@@ -32,7 +32,6 @@ class CondaKernelSpecManager(KernelSpecManager):
 
     def find_kernel_specs(self):
         """Returns a dict mapping kernel names to resource directories."""
-        print('CUSTOM find_kernel_specs at work here')
         d = {}
         # Dynamically update the potential kernel directories.
         envs = conda_envs()
