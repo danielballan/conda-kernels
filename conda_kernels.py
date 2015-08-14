@@ -12,9 +12,16 @@ import json
 from jupyter_client.kernelspec import KernelSpecManager, _list_kernels_in
 
 
+# last-resort place to look for conda
+ROOT_CONDA_PATH = '/opt/miniconda/bin/conda'
+
+
 def conda_envs():
     # Get conda off the path.
-    conda = subprocess.check_output(['which', 'conda']).strip()
+    try:
+        conda = subprocess.check_output(['which', 'conda']).strip()
+    except subprocess.CalledProcessError as e:
+        conda = ROOT_CONDA_PATH
     if not os.path.exists(conda):
         return []
 
