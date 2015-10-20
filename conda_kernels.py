@@ -6,6 +6,7 @@ https://gist.github.com/pelson/ca05c73f4027371f6de4
 """
 
 import glob
+import time
 import os
 import subprocess
 import json
@@ -36,15 +37,21 @@ _CENTRAL_ENVS = '/usr/share/jupyter/kernels/'
 
 
 class CondaKernelSpecManager(KernelSpecManager):
+    # Jupyter calls `find_kernel_specs` several times in quick succession,
+    # and since conda is slow, we cache for 10 seconds.
+    cache_last_updated = 0
+    cache = {}
 
     def find_kernel_specs(self):
         """Returns a dict mapping kernel names to resource directories."""
-        d = {}
-        # Dynamically update the potential kernel directories.
-        envs = conda_envs()
-        self.kernel_dirs.extend(envs)
-        self.kernel_dirs.extend(glob.glob(_CENTRAL_ENVS))
-        for kernel_dir in set(self.kernel_dirs):
-            d.update(_list_kernels_in(kernel_dir))
+        if time.time() - self.cache_last_updated > 10:
+            self.cache = {}
+            # Dynamically update the potential kernel directories.
+            envs = conda_envs()
+            self.kernel_dirs.extend(envs)
+            self.kernel_dirs.extend(glob.glob(_CENTRAL_ENVS))
+            for kernel_dir in set(self.kernel_dirs):
+                self.cache.update(_list_kernels_in(kernel_dir))
+            self.cache_last_updated = time.time()
 
-        return d
+        return self.cache
