@@ -3,6 +3,7 @@
 # Create a kernel for this env
 
 ENV_NAME=$(basename ${PREFIX})
+HOSTNAME=`hostname`
 
 echo "Creating kernel for the \"${ENV_NAME}\" env." > $PREFIX/.messages.txt
 
@@ -16,11 +17,16 @@ cat > $PREFIX/share/jupyter/kernels/env_${ENV_NAME}/kernel.json <<EOF
   "name": "ipython"
  },
  "argv": [
+  "source",
+  "activate",
+  "${ENV_NAME}",
+  "&&",
   "${PREFIX}/bin/python",
   "-c",
   "from IPython.kernel.zmq.kernelapp import main; main()",
   "-f",
   "{connection_file}"
- ]
+ ],
+ "host":"${HOSTNAME}"
 }
 EOF
