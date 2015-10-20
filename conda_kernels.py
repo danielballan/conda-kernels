@@ -21,7 +21,7 @@ def conda_envs():
     # Get conda off the path.
     try:
         conda = subprocess.check_output(['which', 'conda']).strip()
-    except subprocess.CalledProcessError as e:
+    except subprocess.CalledProcessError:
         conda = ROOT_CONDA_PATH
     if not os.path.exists(conda):
         return []
