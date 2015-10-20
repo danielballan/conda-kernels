@@ -14,7 +14,7 @@ from jupyter_client.kernelspec import KernelSpecManager, _list_kernels_in
 
 
 # last-resort place to look for conda
-ROOT_CONDA_PATH = '/opt/miniconda/bin/conda'
+ROOT_CONDA_PATH = '/opt/conda/bin/conda'
 
 
 def conda_envs():
