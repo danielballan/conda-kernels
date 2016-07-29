@@ -37,18 +37,15 @@ class CondaKernelSpecManager(KernelSpecManager):
     # and since conda is slow, we cache for 10 seconds.
     cache_last_updated = 0
     cache = {}
-    system_kernel_dirs = List(Unicode(), [], config=True)
 
     def find_kernel_specs(self):
         """Returns a dict mapping kernel names to resource directories."""
+        specs = super().find_kernel_specs()
         if time.time() - self.cache_last_updated > 10:
-            self.cache = {}
+            self.cache.clear()
             # Dynamically update the potential kernel directories.
-            envs = conda_envs()
-            self.kernel_dirs.extend(envs)
-            self.kernel_dirs.extend(self.system_kernel_dirs)
-            for kernel_dir in set(self.kernel_dirs):
+            for kernel_dir in set(conda_envs()):
                 self.cache.update(_list_kernels_in(kernel_dir))
             self.cache_last_updated = time.time()
-
-        return self.cache
+        specs.update(self.cache)
+        return specs
